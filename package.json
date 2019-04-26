@@ -1,11 +1,16 @@
 {
-  "name": "protype-editor",
+  "name": "prototype-editor",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "immutable": "^4.0.0-rc.12",
     "react": "^16.8.6",
+    "react-beautiful-dnd": "^11.0.1",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.0"
+    "react-scripts": "3.0.0",
+    "shortid": "^2.2.14",
+    "slate": "^0.45.1",
+    "slate-react": "^0.21.21"
   },
   "scripts": {
     "start": "react-scripts start",
