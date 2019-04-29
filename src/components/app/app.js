@@ -5,6 +5,7 @@ import shortId from "shortid";
 import initialValue from "../slate/initial-value.json";
 import { MarkHotkey } from "../slate/utilities";
 import { CodeMark, BoldMark, ItalicMark, UnderlineMark, StrikethroughMark } from "../slate/marks";
+import packageJson from "../../../package.json";
 
 const plugins = [
   MarkHotkey({ type: "bold", key: "b" }),
@@ -107,7 +108,10 @@ class App extends React.Component {
   render() {
     return (
       <div className="app">
-        <h1>Testing: multiple editors</h1>
+        <h1>
+          Testing: multiple editors
+          <code className="versionNumber">version: {packageJson.version}</code>
+        </h1>
 
         <header className="header">
           <button onClick={this.handleAddingEditor} className="btn addEditorBtn">
