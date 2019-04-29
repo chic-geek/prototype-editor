@@ -39,13 +39,18 @@ ul {
   padding: 8px 10px;
 }
 
+.btn:disabled,
+.btn[disabled] {
+  cursor: not-allowed;
+}
+
 .addEditorBtn {
-  background-color: #4caf50;
+  background-color: #BDBDBD;
   color: white;
 }
 
 .removeEditorBtn {
-  background-color: #f44336;
+  background-color: #757575;
   color: white;
 }
 
@@ -65,13 +70,27 @@ ul {
 }
 
 .editorContainer {
-  border-left: 3px solid #eee;
+  display: flex;
   margin-bottom: 2rem;
   padding: 1rem;
+  padding-left: 0;
 }
 
-.editorContainer:hover {
-  border-color: #BBB;
+.editorDragHandle {
+  background-color: #eee;
+  cursor: pointer;
+  width: 3px;
+  margin-right: 1rem;
+}
+
+.editorDragHandle:hover {
+  background-color: #BBB;
+  width: 6px;
+  margin-right: calc(1rem - 3px);
+}
+
+.editorInternal {
+  width: 100%;
 }
 
 .editorContainer:last-of-type {
@@ -80,6 +99,7 @@ ul {
 
 .editorContainerMeta {
   border-top: 1px solid #e1e1e1;
+  color: #9e9e9e;
   margin-top: 1.5rem;
   padding-top: 1rem;
 }

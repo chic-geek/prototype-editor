@@ -80,6 +80,30 @@ class App extends React.Component {
     });
   };
 
+  onDragStart = (e, index) => {
+    this.draggedItem = this.state.editors[index];
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/html", e.target.parentNode);
+    e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
+  };
+
+  onDragOver = (index) => {
+    const draggedOverItem = this.state.editors[index];
+
+    // if the item is dragged over itself, ignore
+    if (this.draggedItem === draggedOverItem) {
+      return;
+    }
+
+    // filter out the currently dragged item
+    let editors = this.state.editors.filter((item) => item !== this.draggedItem);
+
+    // add the dragged item after the dragged over item
+    editors.splice(index, 0, this.draggedItem);
+
+    this.setState({ editors });
+  };
+
   render() {
     return (
       <div className="app">
@@ -93,31 +117,43 @@ class App extends React.Component {
 
         <div className="editorsContainer">
           {this.state.editors.map((editor, idx) => (
-            <div key={editor.id} className="editorContainer">
-              <Editor
-                value={editor.value}
-                plugins={plugins}
-                placeholder={"Get writing..."}
-                onChange={(change, id) => this.handleChange(change, editor.id)}
-                renderMark={this.renderMark}
+            <div
+              key={editor.id}
+              className="editorContainer"
+              onDragOver={() => this.onDragOver(idx)}>
+              <div
+                className="editorDragHandle"
+                draggable={true}
+                onDragStart={(e) => this.onDragStart(e, idx)}
+                onDragEnd={this.onDragEnd}
               />
+              <div className="editorInternal">
+                <Editor
+                  value={editor.value}
+                  plugins={plugins}
+                  placeholder={"Get writing..."}
+                  onChange={(change, id) => this.handleChange(change, editor.id)}
+                  renderMark={this.renderMark}
+                />
 
-              <div className="editorContainerMeta flex">
-                <div>
-                  <code>editor id: {editor.id}</code>
-                </div>
-                <div class="editorContainerMetaActions">
-                  <button
-                    className="btn addEditorBtn metaEditorBtn"
-                    onClick={() => alert(`Nested editors will be wired up soon!`)}>
-                    Add unit
-                  </button>
-                  <button
-                    onClick={this.handleRemovingEditor}
-                    className="btn removeEditorBtn metaEditorBtn"
-                    value={editor.id}>
-                    Remove unit
-                  </button>
+                <div className="editorContainerMeta flex">
+                  <div>
+                    <code>editor id: {editor.id}</code>
+                  </div>
+                  <div className="editorContainerMetaActions">
+                    <button
+                      className="btn addEditorBtn metaEditorBtn"
+                      disabled
+                      onClick={() => alert(`Nested editors will be wired up soon!`)}>
+                      Add unit
+                    </button>
+                    <button
+                      onClick={this.handleRemovingEditor}
+                      className="btn removeEditorBtn metaEditorBtn"
+                      value={editor.id}>
+                      Remove unit
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
