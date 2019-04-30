@@ -17,7 +17,13 @@ const plugins = [
 
 class App extends React.Component {
   state = {
-    editors: [],
+    isDebugging: false,
+    editors: [
+      {
+        id: shortId.generate(),
+        value: Value.fromJSON(initialValue),
+      },
+    ],
   };
 
   handleChange = (props, id) => {
@@ -105,73 +111,93 @@ class App extends React.Component {
     this.setState({ editors });
   };
 
+  isDebugging = () => {
+    this.setState({
+      isDebugging: !this.state.isDebugging,
+    });
+  };
+
   render() {
     return (
       <div className="app">
-        <h1>
-          Testing: multiple editors
-          <code className="versionNumber">version: {packageJson.version}</code>
-        </h1>
-
-        <header className="header">
-          <button onClick={this.handleAddingEditor} className="btn addEditorBtn">
-            Add unit
-          </button>
-        </header>
-
-        <div className="editorsContainer">
-          {this.state.editors.map((editor, idx) => (
-            <div
-              key={editor.id}
-              className="editorContainer"
-              onDragOver={() => this.onDragOver(idx)}>
+        <div className="container">
+          <header className="header">
+            <button onClick={this.handleAddingEditor} className="btn addEditorBtn">
+              Add unit
+            </button>
+          </header>
+          <div className="editorsContainer">
+            {this.state.editors.map((editor, idx) => (
               <div
-                className="editorDragHandle"
-                draggable={true}
-                onDragStart={(e) => this.onDragStart(e, idx)}
-                onDragEnd={this.onDragEnd}
-              />
-              <div className="editorInternal">
-                <Editor
-                  value={editor.value}
-                  plugins={plugins}
-                  placeholder={"Get writing..."}
-                  onChange={(change, id) => this.handleChange(change, editor.id)}
-                  renderMark={this.renderMark}
+                key={editor.id}
+                className="editorContainer"
+                onDragOver={() => this.onDragOver(idx)}>
+                <div
+                  className="editorDragHandle"
+                  draggable={true}
+                  onDragStart={(e) => this.onDragStart(e, idx)}
+                  onDragEnd={this.onDragEnd}
                 />
+                <div className="editorInternal">
+                  <Editor
+                    value={editor.value}
+                    plugins={plugins}
+                    placeholder={"Type something..."}
+                    onChange={(change, id) => this.handleChange(change, editor.id)}
+                    renderMark={this.renderMark}
+                  />
 
-                <div className="editorContainerMeta flex">
-                  <div>
-                    <code>editor id: {editor.id}</code>
-                  </div>
-                  <div className="editorContainerMetaActions">
-                    <button
-                      className="btn addEditorBtn metaEditorBtn"
-                      disabled
-                      onClick={() => alert(`Nested editors will be wired up soon!`)}>
-                      Add unit
-                    </button>
-                    <button
-                      onClick={this.handleRemovingEditor}
-                      className="btn removeEditorBtn metaEditorBtn"
-                      value={editor.id}>
-                      Remove unit
-                    </button>
+                  <div className="editorContainerMeta flex">
+                    <div>
+                      <code>editor id: {editor.id}</code>
+                    </div>
+                    <div className="editorContainerMetaActions">
+                      <button
+                        className="btn addEditorBtn metaEditorBtn"
+                        disabled
+                        onClick={() => alert(`Nested editors will be wired up soon!`)}>
+                        Add unit
+                      </button>
+                      <button
+                        onClick={this.handleRemovingEditor}
+                        className="btn removeEditorBtn metaEditorBtn"
+                        value={editor.id}>
+                        Remove unit
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
+            ))}
+          </div>
+
+          {this.state.isDebugging && (
+            <div className="detailsComponent">
+              <details>
+                <summary>
+                  <code>application state</code>
+                </summary>
+                <pre>
+                  <code>{JSON.stringify(this.state, null, 2)}</code>
+                </pre>
+              </details>
             </div>
-          ))}
+          )}
         </div>
 
-        <details className="detailsComponent">
-          <summary>
-            <code>application state</code>
-          </summary>
-          <pre>
-            <code>{JSON.stringify(this.state, null, 2)}</code>
-          </pre>
-        </details>
+        <div className="topBar">
+          <code>
+            <strong>Prototype:</strong> Testing unit creation
+          </code>
+          <div>
+            <code className="versionNumber">
+              <strong>Version:</strong> {packageJson.version}
+            </code>
+            <button className="btn debugBtn" onClick={this.isDebugging}>
+              Debug
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
