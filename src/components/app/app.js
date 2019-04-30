@@ -148,9 +148,7 @@ class App extends React.Component {
                   />
 
                   <div className="editorContainerMeta flex">
-                    <div>
-                      <code>editor id: {editor.id}</code>
-                    </div>
+                    <div>{this.state.isDebugging && <code>editor id: {editor.id}</code>}</div>
                     <div className="editorContainerMetaActions">
                       <button
                         className="btn addEditorBtn metaEditorBtn"
