@@ -1,0 +1,37 @@
+.btn {
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: .875rem;
+  font-weight: 600;
+  padding: 8px 10px;
+}
+
+.btn:disabled,
+.btn[disabled] {
+  cursor: not-allowed;
+}
+
+.addEditorBtn {
+  background-color: #9E9E9E;
+  color: white;
+}
+
+.removeEditorBtn {
+  background-color: #616161;
+  color: white;
+}
+
+.metaEditorBtn {
+  font-size: .750rem;
+  padding: 6px 8px;
+  margin: 0 3px;
+}
+
+.debugBtn {
+  font-size: .750rem;
+  padding: 4px 6px;
+  margin-left: 1rem;
+  color: white;
+  background-color: #2196f3;
+}
