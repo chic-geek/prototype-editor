@@ -1,7 +1,7 @@
 {
   "name": "prototype-editor",
   "homepage": "https://chic-geek.github.io/prototype-editor/",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "dependencies": {
     "immutable": "^4.0.0-rc.12",
