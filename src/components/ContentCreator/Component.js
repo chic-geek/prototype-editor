@@ -6,7 +6,6 @@ import initialValue from "../slate/initial-value.json";
 import { MarkHotkey } from "../slate/utilities";
 import { CodeMark, BoldMark, ItalicMark, UnderlineMark, StrikethroughMark } from "../slate/marks";
 import Button from "../Button";
-import Draggable from "../Draggable";
 
 class ContentCreator extends React.Component {
   state = {
@@ -26,57 +25,50 @@ class ContentCreator extends React.Component {
         <Button label="Add unit" classes="addEditorBtn mb-2" action={this.handleAddingEditor} />
         <div className="editorsContainer">
           {this.state.editors.map((editor, idx) => (
-            <Draggable key={editor.id}>
-              {({ onDragStart, onDragOver }) => {
-                console.log(this.state.editors[idx]);
+            <div
+              className="editorContainer"
+              key={editor.id}
+              onDragOver={() => this.onDragOver(idx)}>
+              <div
+                className="editorDragHandle"
+                draggable={true}
+                onDragStart={(e) => this.onDragStart(e, idx)}
+                onDragEnd={this.onDragEnd}
+              />
+              <div className="editorInternal">
+                <Editor
+                  value={editor.value}
+                  plugins={[
+                    MarkHotkey({ type: "bold", key: "b" }),
+                    MarkHotkey({ type: "italic", key: "i" }),
+                    MarkHotkey({ type: "underline", key: "u" }),
+                    MarkHotkey({ type: "strikethrough", key: "s" }),
+                    MarkHotkey({ type: "code", key: "`" }),
+                  ]}
+                  placeholder={"Type something..."}
+                  onChange={(change, id) => this.handleChange(change, editor.id)}
+                  renderMark={this.renderMark}
+                />
 
-                return (
-                  <div
-                    className="editorContainer"
-                    onDragOver={() => onDragOver(this.state.editors[idx])}>
-                    <div
-                      className="editorDragHandle"
-                      draggable={true}
-                      onDragStart={(e) => onDragStart(e, this.state.editors[idx])}
-                      onDragEnd={this.onDragEnd}
+                <div className="editorContainerMeta flex">
+                  <div>{inDebug && <code>editor id: {editor.id}</code>}</div>
+                  <div className="editorContainerMetaActions">
+                    <Button
+                      label="Add unit"
+                      classes="addEditorBtn metaEditorBtn"
+                      action={() => alert(`Nested editors will be wired up soon!`)}
+                      disabled
                     />
-                    <div className="editorInternal">
-                      <Editor
-                        value={editor.value}
-                        plugins={[
-                          MarkHotkey({ type: "bold", key: "b" }),
-                          MarkHotkey({ type: "italic", key: "i" }),
-                          MarkHotkey({ type: "underline", key: "u" }),
-                          MarkHotkey({ type: "strikethrough", key: "s" }),
-                          MarkHotkey({ type: "code", key: "`" }),
-                        ]}
-                        placeholder={"Type something..."}
-                        onChange={(change, id) => this.handleChange(change, editor.id)}
-                        renderMark={this.renderMark}
-                      />
-
-                      <div className="editorContainerMeta flex">
-                        <div>{inDebug && <code>editor id: {editor.id}</code>}</div>
-                        <div className="editorContainerMetaActions">
-                          <Button
-                            label="Add unit"
-                            classes="addEditorBtn metaEditorBtn"
-                            action={() => alert(`Nested editors will be wired up soon!`)}
-                            disabled
-                          />
-                          <Button
-                            label="Remove unit"
-                            classes="removeEditorBtn metaEditorBtn"
-                            action={this.handleRemovingEditor}
-                            value={editor.id}
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    <Button
+                      label="Remove unit"
+                      classes="removeEditorBtn metaEditorBtn"
+                      action={this.handleRemovingEditor}
+                      value={editor.id}
+                    />
                   </div>
-                );
-              }}
-            </Draggable>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </React.Fragment>
@@ -117,6 +109,8 @@ class ContentCreator extends React.Component {
     this.setState({
       editors: mappedEditors,
     });
+
+    this.props.contentChange(this.state.editors);
   };
 
   handleKeyDown = (event, editor, next) => {
@@ -159,6 +153,21 @@ class ContentCreator extends React.Component {
       default:
         return next();
     }
+  };
+
+  onDragStart = (e, index) => {
+    this.draggedItem = this.state.editors[index];
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/html", e.target.parentNode);
+    e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
+  };
+
+  onDragOver = (index) => {
+    const draggedOverItem = this.state.editors[index];
+    if (this.draggedItem === draggedOverItem) return;
+    let editors = this.state.editors.filter((item) => item !== this.draggedItem);
+    editors.splice(index, 0, this.draggedItem);
+    this.setState({ editors });
   };
 }
 

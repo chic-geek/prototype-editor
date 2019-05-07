@@ -6,6 +6,7 @@ import ContentCreator from "../ContentCreator";
 class App extends React.Component {
   state = {
     inDebug: false,
+    editorsState: [],
   };
 
   render() {
@@ -14,7 +15,10 @@ class App extends React.Component {
     return (
       <div className="app">
         <div className="container">
-          <ContentCreator inDebug={inDebug} />
+          <ContentCreator
+            inDebug={inDebug}
+            contentChange={(fields) => this.contentChange(fields)}
+          />
           {inDebug && <DebugDetails state={this.state} />}
         </div>
 
@@ -25,6 +29,10 @@ class App extends React.Component {
       </div>
     );
   }
+
+  contentChange = (editorsState) => {
+    this.setState({ editorsState });
+  };
 }
 
 export default App;
