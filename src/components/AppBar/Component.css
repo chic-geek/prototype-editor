@@ -1,0 +1,16 @@
+.appBar {
+  background-color: #E0E0E0;
+  color: #424242;
+  display: flex;
+  padding: 1rem;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  justify-content: space-between;
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+.appBar:hover {
+  opacity: 1;
+}
