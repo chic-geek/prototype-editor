@@ -18,8 +18,6 @@ class ContentCreator extends React.Component {
   };
 
   render() {
-    const { inDebug } = this.props;
-
     return (
       <React.Fragment>
         <Button label="Add unit" classes="addEditorBtn mb-2" action={this.handleAddingEditor} />
@@ -51,7 +49,7 @@ class ContentCreator extends React.Component {
                 />
 
                 <div className="editorContainerMeta flex">
-                  <div>{inDebug && <code>editor id: {editor.id}</code>}</div>
+                  <div />
                   <div className="editorContainerMetaActions">
                     <Button
                       label="Add unit"
